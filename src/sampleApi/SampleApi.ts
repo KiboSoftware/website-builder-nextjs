@@ -81,7 +81,7 @@ function mapKiboProductToApiProduct(kiboProduct:any) {
         category: kiboProduct.categories?.[0]?.content?.name || '',
         image: kiboProduct.content?.productImages?.[0]?.imageUrl || '',
         rating: {
-            rate: kiboProduct.personalizationScore || 0,
+            rate: 3,
             count: 0 // Kibo doesn't seem to have a review count field
         }
     };
@@ -110,7 +110,22 @@ export class SampleApi {
 
         return [...(this.listCache ?? [])];
     }
+    async getProducts(ids: string[]): Promise<SampleProduct[]> {
+      if(!ids || ids.length === 0) {
+          return [];
+      }
+      const filterStr = ids.map(id => `productCode eq ${id}`).join(' or '); 
+      const kiboProducts = await fetcher({ query: getProductQuery, variables: { filter: filterStr } }, {});
+        if (!kiboProducts || !kiboProducts.data || !kiboProducts.data.products || !kiboProducts.data.products.items) {
+            return [];
+        }
+        const products: ApiProduct[] = kiboProducts.data.products.items.map(mapKiboProductToApiProduct);
+        this.listCache = products.map(product => {
+            return { ...product, id: String(product.id) };
+        }) as SampleProduct[];
 
+        return [...(this.listCache ?? [])];
+    }
     async getProduct(id: string): Promise<SampleProduct | null> {
         if (this.productCache.has(id)) {
             return this.productCache.get(id) as SampleProduct;

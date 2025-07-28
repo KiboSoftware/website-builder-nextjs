@@ -2,6 +2,7 @@
 import { createComponent, createTextInput } from "@webiny/website-builder-nextjs";
 import { Hero_1 } from "./components/Hero-1";
 import { ProductRecommendations } from "./components/ProductRecommendations";
+import { KiboProductRecommendations } from "./components/KiboProductRecommendations";
 
 export const editorComponents = [
     createComponent(ProductRecommendations, {
@@ -26,5 +27,24 @@ export const editorComponents = [
     createComponent(Hero_1, {
         name: "Webiny/Hero",
         label: "Hero #1"
+    }),
+    createComponent(KiboProductRecommendations, {
+        name: "KiboCommerce/ProductRecommendations",
+        label: "Product Recommendations",
+        group: "kibo",
+        inputs: [
+            createTextInput({
+                name: "title",
+                label: "Title",
+                defaultValue: "",
+                required: true
+            }),
+            createTextInput({
+                name: "productIds",
+                list: true,
+                renderer: "KiboCommerce/Product/List",
+                label: "Products"
+            })
+        ]
     })
 ];

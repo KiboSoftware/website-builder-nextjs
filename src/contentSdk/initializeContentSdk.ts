@@ -1,6 +1,7 @@
 import {
     contentSdk,
     registerComponentGroup,
+
     type ComponentManifest
 } from "@webiny/website-builder-nextjs";
 
@@ -27,6 +28,12 @@ export const initializeContentSdk = (options: ContentSdkOptions = {}) => {
                 name: "sample",
                 label: "Sample Ecommerce",
                 description: "Sample ecommerce components"
+            });
+
+            registerComponentGroup({
+                name: "kibo",
+                label: "Kibo Commerce",
+                description: "Kibo Commerce components"
             });
 
             registerComponentGroup({
